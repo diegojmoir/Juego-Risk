@@ -552,6 +552,28 @@ namespace simplyRiskGame.Controllers
         }
 
         [HttpPost]
+        public ActionResult getWinner(int player, int ai)
+        {
+            var countries1 = manager.getPlayerCountries(player).Count();
+            var countries2 = manager.getPlayerCountries(ai).Count();
+            var winner = 0;
+            if(countries1 == 0)
+            {
+                ViewBag.winner = "Human win i guess";
+                winner = 1; 
+            }else if(countries2 == 0)
+            {
+                ViewBag.winner = "AI wins";
+                winner = 2;
+            }
+            else
+            {
+                ViewBag.winner = "Tied";
+            }
+            return View();
+        }
+
+        [HttpPost]
         public ActionResult getNeighboor(string country)
         {
             var ListNeighboor = manager.getNeighborsstr(country);

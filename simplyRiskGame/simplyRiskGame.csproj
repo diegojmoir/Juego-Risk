@@ -204,6 +204,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\mapdata.js" />
     <Content Include="Scripts\worldmap.js" />
+    <Content Include="Views\Home\getWinner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

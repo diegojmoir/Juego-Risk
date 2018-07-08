@@ -1383,6 +1383,8 @@
                 data: {},
                 success: function (data) {
                     troopLimit = @ViewBag.myTroopLimit;
+                    console.log(12);
+                    return getWinner(); 
                 }
             });
         });
@@ -3000,6 +3002,18 @@
         });
 
     }
+
+    function getWinner() {
+        $.ajax({
+            url: "/Home/getWinner",
+            type: "POST",
+            data: { countries1: 1, countries2: 2 },
+            success: function (data) {
+                return true;
+            }
+        })           
+    }
+
 
     function Troops(){
         $.ajax({
