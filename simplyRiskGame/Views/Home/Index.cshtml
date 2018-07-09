@@ -1365,7 +1365,7 @@
         paintInitialTroops(myColor,enemyColor);
         $("#movementMenu").hide();
         document.getElementById("troopsToDeploy").value = troopLimit;
-        
+
 
         $('#IATurn').click(function (event) {
             event.preventDefault();
@@ -1381,51 +1381,78 @@
         });
 
         $('#commit').click(function(event) {
-            debugger;
+            
             event.preventDefault();
-            commitMovements = commitMovements.substring(0, commitMovements.length - 1);
-            var movementsArray = commitMovements.split('*');
-            commitMovements="";
-            debugger;
-            movementsArray.forEach(function(m){
-                debugger;
-                var features = m.split('|');
-                // values = one if the country was conquered(0) + id deployer(1) + deployer remaining troops(2) + id receiver(3) + receiver remaining troops(4) + player(5)
-                if(!(movementsArray[0] == "")){
-                    $(equivalences[features[1]].text).text(features[2]);
-                    $(equivalences[features[3]].text).text(features[4]);
-
-                    if(features[0]==1){
-                        paintOneTroop(features[5], features[3]);
-                    }
-                }
-                
-                
-            });
+            //oponent movement
             $.ajax({
-                url: "/Home/assignTroops",
+                url: "/Home/enemyMovements",
                 type: "POST",
                 data: {},
                 success: function (data) {
-                    debugger;
+                    //do machine movements
+
+                    //asignment troops
+                    
+
                     troopLimit = @ViewBag.myTroopLimit;
-<<<<<<< HEAD
+
                     console.log(12);
                     return getWinner(); 
-=======
+
                     player = 1;
                     $("#troopsToDeploy").val(troopLimit);
-<<<<<<< HEAD
->>>>>>> 7be4d89fa0982b9dad499832e260e7442f2bb7d9
-=======
+
                     isAssignment = true;
->>>>>>> d4a478cff66a808802b7fdfec24b156608e387e4
+
+                    data.assign.forEach(function(u){
+                        
+                        var countryQuantity = u.split('|');
+                        assignTroopsEnemy(countryQuantity[0], countryQuantity[1]);
+                    });
+                    
+                    //movements
+                    
+                    commitMovements+=data.movements;
+
+                    //end machine movements
+
+                    //change the map with the player movements
+                    commitMovements = commitMovements.substring(0, commitMovements.length - 1);
+                    var movementsArray = commitMovements.split('*');
+                    commitMovements="";
+                    
+                    movementsArray.forEach(function(m){
+                        
+                        var features = m.split('|');
+                        // values = one if the country was conquered(0) + id deployer(1) + deployer remaining troops(2) + id receiver(3) + receiver remaining troops(4) + player(5)
+                        if(!(movementsArray[0] == "")){
+                            $(equivalences[features[1]].text).text(features[2]);
+                            $(equivalences[features[3]].text).text(features[4]);
+
+                            if(features[0]==1){
+                                paintOneTroop(features[5], features[3]);
+                            }
+                        }
+                    });
+                    $.ajax({
+                        url: "/Home/assignTroops",
+                        type: "POST",
+                        data: {},
+                        success: function (data) {
+                            
+                            troopLimit = @ViewBag.myTroopLimit;
+                            player = 1;
+                            $("#troopsToDeploy").val(troopLimit);
+                            isAssignment = true;
+                        }
+                    });
+                    $("#movementMenu").hide();
+                    $("#country1 option").remove();
+                    $("#country2 option").remove();
+                    $("#NumTroops option").remove();
+
                 }
             });
-            $("#movementMenu").hide();
-            $("#country1 option").remove();
-            $("#country2 option").remove();
-            $("#NumTroops option").remove();
         });
 
 
@@ -1433,7 +1460,7 @@
         //Attaking n' movement stuff
         $("#redButton").click(function (event) {
             event.preventDefault();
-            debugger;
+            
             var information = $("#country1 option:selected").text();
             console.log(information);
             information += "|" + $("#country2 option:selected").text();
@@ -1443,11 +1470,11 @@
             $.ajax({
                 url: "/Home/getMovementLogbook",
                 type: "POST",
-                data: { _data: information },
+                data: { _data: information, player: true},
                 success: function (data) {
-                    debugger;
+                    
                     commitMovements += data._values +"*"
-                    return true; 
+                    return true;
                 }
 
             });
@@ -1459,7 +1486,7 @@
 
         //alaska
         $("#alaska").click(function (event) {
-            debugger;
+            
             event.preventDefault();
              if (isAssignment) {
                 //evaluate if a contry is mine
@@ -1493,7 +1520,7 @@
         //alberta
         $("#alberta").click(function (event) {
             event.preventDefault();
-            debugger;
+            
             if(isAssignment){
                 $.ajax({
                     url: "/Home/isTheCountryMine",
@@ -1524,7 +1551,7 @@
 
         //easternUnitedStated
         $("#easternUnitedStates").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -1556,7 +1583,7 @@
 
         //groendlandia
         $("#groendlandia").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -1589,7 +1616,7 @@
         //northeastTerritories
         $("#northeastTerritories").click(function (event) {
             event.preventDefault();
-            debugger;
+            
             if(isAssignment){
                 $.ajax({
                     url: "/Home/isTheCountryMine",
@@ -1621,7 +1648,7 @@
         //northeastTerritories
         $("#ontario").click(function (event) {
             event.preventDefault();
-            debugger;
+            
             if(isAssignment){
                 $.ajax({
                     url: "/Home/isTheCountryMine",
@@ -1653,7 +1680,7 @@
         //Quebec
         $("#quebec").click(function (event) {
             event.preventDefault();
-            debugger;
+            
             if(isAssignment){
                 $.ajax({
                     url: "/Home/isTheCountryMine",
@@ -1685,7 +1712,7 @@
 
         //eUWest 9
         $("#eUWest").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -1718,7 +1745,7 @@
 
         //Argentina 10
         $("#argentina").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -1750,7 +1777,7 @@
 
         //Brazil 11
         $("#brazil").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -1783,7 +1810,7 @@
 
         //Peru 12
         $("#peru").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -1815,7 +1842,7 @@
 
         //venezuela 13
         $("#venezuela").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -1848,7 +1875,7 @@
         //congo 14
         $("#congo").click(function (event) {
             event.preventDefault();
-            debugger;
+            
             if(isAssignment){
                 $.ajax({
                     url: "/Home/isTheCountryMine",
@@ -1880,7 +1907,7 @@
         //eastAfrica 15
         $("#eastAfrica").click(function (event) {
             event.preventDefault();
-            debugger;
+            
             if(isAssignment){
                 $.ajax({
                     url: "/Home/isTheCountryMine",
@@ -1911,7 +1938,7 @@
 
         //Egipt 16
         $("#egipt").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -1943,7 +1970,7 @@
 
         //Madagascar 17
         $("#madagascar").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -1975,7 +2002,7 @@
 
         //southAfrica 19
         $("#southAfrica").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2008,7 +2035,7 @@
 
         //northAfrica
         $("#northAfrica").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2040,7 +2067,7 @@
 
         //grandBretaña 20
         $("#grandBretaña").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2073,7 +2100,7 @@
 
         //island 21
         $("#island").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2105,7 +2132,7 @@
 
         //polonia 22
         $("#northEurope").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2137,7 +2164,7 @@
 
         //escandinavia 23
         $("#escandinavia").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2170,7 +2197,7 @@
 
         //southEurope 24
         $("#southEurope").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2203,7 +2230,7 @@
 
         //ucrania 25
         $("#ucrania").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2236,7 +2263,7 @@
 
         //westernEurope 26
         $("#westernEurope").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2267,7 +2294,7 @@
 
         //afganistan 27
         $("#afganistan").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2299,7 +2326,7 @@
 
         //China 28
         $("#china").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2332,7 +2359,7 @@
         //india 29
         $("#india").click(function (event) {
             event.preventDefault();
-            debugger;
+            
             if(isAssignment){
                 $.ajax({
                     url: "/Home/isTheCountryMine",
@@ -2362,7 +2389,7 @@
 
         //irkutsk 30
         $("#irkutsk").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2395,7 +2422,7 @@
         //japon 31
         $("#japan").click(function (event) {
             event.preventDefault();
-            debugger;
+            
             if(isAssignment){
                 $.ajax({
                     url: "/Home/isTheCountryMine",
@@ -2426,7 +2453,7 @@
 
         //kamchatca 32
         $("#kamchatca").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2459,7 +2486,7 @@
 
         //middleEast 33
         $("#middleEast").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2491,7 +2518,7 @@
 
         //mongolia 34
         $("#mongolia").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2524,7 +2551,7 @@
 
         //slam 35
         $("#slam").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2555,7 +2582,7 @@
 
         //siberia 36
         $("#siberia").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2587,7 +2614,7 @@
 
         //ural 37
         $("#ural").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2619,7 +2646,7 @@
 
         //yakutska 38
         $("#yakutska").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2652,7 +2679,7 @@
 
         //easternAustralia 39
         $("#easternAustralia").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2685,7 +2712,7 @@
 
         //indonesia 40
         $("#indonesia").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2718,7 +2745,7 @@
 
         //nuevaGuinea 41
         $("#nuevaGuinea").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2751,7 +2778,7 @@
 
         //westerbAustralia 42
         $("#westerbAustralia").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2784,7 +2811,7 @@
 
         //mexico 3
         $("#mexico").click(function (event) {
-            debugger;
+            
             event.preventDefault();
             if(isAssignment){
                 $.ajax({
@@ -2830,7 +2857,7 @@
                 type: "POST",
                 data: { country : countryName },
                 success: function (data) {
-                    
+
                     getTroopsCount(data.number);
                 }
             });
@@ -2842,7 +2869,7 @@
                 type: "POST",
                 data: { troopsAmount : Availabletroops },
                 success: function (data) {
-                    
+
                     $("#NumTroops option").remove();
                     data.troopsOptions.forEach(function(t){
                         $('#NumTroops').append('<option>'+t+'</option>');
@@ -2851,7 +2878,7 @@
             });}
 
         function nearbyCountries(countryName){
-            
+
             $.ajax({
                 url: "/Home/getNeighboor",
                 type: "POST",
@@ -2866,6 +2893,27 @@
             });
         }
     });
+
+    function assignTroopsEnemy(country, quantity){
+        var oldQuantity = $(equivalences[country].text).text();
+        var newQuantity = Number(oldQuantity) + Number(quantity);
+        $(equivalences[country].text).text(newQuantity);
+    
+    }
+
+    function EnemyMovements(enemyMovement){
+        $.ajax({
+            url: "/Home/getMovementLogbook",
+            type: "POST",
+            data: { _data: enemyMovement, player: false},
+            success: function (data) {
+                
+                commitMovements += data._values +"*"
+                return true;
+            }
+
+        });
+    }
 </script>
 
 
