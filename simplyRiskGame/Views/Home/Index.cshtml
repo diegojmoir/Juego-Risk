@@ -1378,6 +1378,8 @@
             $("#country1 option").remove();
             $("#country2 option").remove();
             $("#NumTroops option").remove();
+            //getId($("#country1").text());
+            
         });
 
         $('#commit').click(function (event) {
@@ -1447,12 +1449,15 @@
                     });
                     $("#movementMenu").hide();
                     $("#country1 option").remove();
-                    $("#country2 option").remove();
+                   // $("#country2 option").remove();
                     $("#NumTroops option").remove();
 
                 }
             });
         });
+
+       
+        
 
 
         //Remaining troops to deploy
@@ -1477,9 +1482,15 @@
                 }
 
             });
+
             $("#country1 option:selected").remove();
-            $("#country2 option:selected").remove();
+            //$("#country2 option:selected").remove();
+            nearbyCountries($("#country1 option:selected").text());
             $("#NumTroops option:selected").remove();
+            getId($("#country1 option:selected").text());
+            if ($("#country1 option").length == 0) {
+                $("#movementMenu").hide();
+            }
         })
 
 
@@ -2862,7 +2873,8 @@
             });
         }
 
-        function getTroopsCount(Availabletroops){
+        function getTroopsCount(Availabletroops) {
+            debugger;
             $.ajax({
                 url: "/Home/troopsAssign",
                 type: "POST",
@@ -2900,8 +2912,27 @@
     
     }
 
+
     function EnemyMovements(enemyMovement) {
         debbuger; 
+
+     //get id from a country by the name 
+    function getId(countryName) {
+        debugger;
+        $.ajax({
+            url: "/Home/getIdByName",
+            type: "POST",
+            data: { name: countryName },
+            success: function (data) {
+
+                getTroopsCount($(equivalences[data.id].text).text());
+                return true;
+            }
+        });
+    }
+
+    function EnemyMovements(enemyMovement){
+
         $.ajax({
             url: "/Home/getMovementLogbook",
             type: "POST",
