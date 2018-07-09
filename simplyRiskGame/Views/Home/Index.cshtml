@@ -1380,8 +1380,7 @@
             $("#NumTroops option").remove();
         });
 
-        $('#commit').click(function(event) {
-            
+        $('#commit').click(function (event) {
             event.preventDefault();
             //oponent movement
             $.ajax({
@@ -2901,7 +2900,8 @@
     
     }
 
-    function EnemyMovements(enemyMovement){
+    function EnemyMovements(enemyMovement) {
+        debbuger; 
         $.ajax({
             url: "/Home/getMovementLogbook",
             type: "POST",
